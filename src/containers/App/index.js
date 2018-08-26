@@ -1,49 +1,136 @@
 import React, {Component} from 'react';
-import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
-
-import Layout from 'components/Layout';
-import Web3Provider from 'core/web3-provider';
-import O2OProtocolProvider from 'core/o2oprotocol-provider';
-import HomePage from 'containers/HomePage';
-import ListingDetail from 'containers/ListingDetail';
-import ListingCreate from 'containers/ListingCreate';
-import MyPurchase from 'containers/MyPurchase';
-import MyListings from 'containers/MyListings';
-import Profile from 'components/Profile';
-import Notifications from 'components/Notifications';
-import TransactionDetail from 'components/TransactionDetail';
-
+import Web3 from "web3";
 import './index.css';
+import abi from "./abi";
+import times from 'async/times';
 
-const ListingDetailPage = props => <ListingDetail listingId={props.match.params.listingId}/>;
-const CreateListingPage = props => <ListingCreate/>;
-const ProfilePage = props => <Profile {...props}/>
-const NotificationsPage = props => <Notifications {...props}/>
-const MyPurchasePage = props => <MyPurchase {...props}/>
-const TransactionDetailPage = props => <TransactionDetail {...props} listingId={props.match.params.listingId}/>
+let web3;
+
+if (typeof window.web3 !== 'undefined') {
+  web3 = new Web3(window.web3.currentProvider);
+} else {
+  // set the provider you want from Web3.providers
+  web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
+}
+
+let defaultAddress;
+
+web3.eth.getAccounts().then((res) => {
+  defaultAddress = res[0];
+})
+
+var contractAddress = "0x8ebfc1ad2bc144dfe8a38344b75dc35fb42c450e";
+var cardbaseInstance = new web3.eth.Contract(abi, contractAddress);
 
 class App extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      noOfCards: 0,
+      cards: []
+    };
+  }
+
+  loadMyCards = () => {
+    let cards = [];
+    let noOfMyCards = 0;
+
+    cardbaseInstance.methods.countCards().call()
+    .then((res) => {
+      const length = Number(res.toString());
+      
+      times(length, (index, cb) => {
+        const promise = cardbaseInstance.methods.cardIndexToOwner(index).call();
+
+        promise.then((ethAddress) => {
+            if (defaultAddress !== ethAddress) {
+              return cb();
+            }
+            
+            noOfMyCards++;
+
+            cardbaseInstance
+            .methods
+            .cards(index)
+            .call()
+            .then(cardDetails => {
+              cards.push(cardDetails);
+  
+              cb();
+            });
+        }, err => {
+          console.error(err);
+          return cb(err);
+        })
+      }, () => {
+        this.setState({
+          cards,
+          noOfMyCards
+        })
+      });
+    });
+  }
+
+  componentDidMount() {
+    this.loadMyCards()
+  }
+
   render() {
     return (
-      <Router>
-        <Layout>
-          <Web3Provider>
-            <O2OProtocolProvider>
-              <Switch>
-                <Route exact path="/" component={HomePage}/>
-                <Route path="/page/:activePage" component={HomePage}/>
-                <Route path="/listing/:listingId" component={ListingDetailPage}/>
-                <Route path="/create" component={CreateListingPage}/>
-                <Route path="/profile" component={ProfilePage}/>
-                <Route path="/notifications" component={NotificationsPage}/>
-                <Route path="/my-purchases/:listingId" component={TransactionDetailPage}/>
-                <Route path="/my-purchases" component={MyPurchasePage}/>
-                <Route path="/my-listings" component={MyListings}/>
-              </Switch>
-            </O2OProtocolProvider>
-          </Web3Provider>
-        </Layout>
-      </Router>
+      <div>
+        Web3 Demo
+
+        {this.state.noOfCards}
+
+        <button onClick={() => {
+          
+        }}>
+          show card index owner
+        </button>
+
+        <button onClick={() => {
+          cardbaseInstance.methods.createNewCard().send({
+            from: defaultAddress
+          }, function (e, res) {
+            console.log(e, res);
+          });
+        }}>Create new button</button>
+
+        <button onClick={() => {
+          cardbaseInstance.methods.countCards().call({
+            from: defaultAddress
+          }).then((res) => {
+            this.setState({
+              noOfCards: Number(res.toString())
+            })
+          });
+        }}>Show card 0</button>
+
+        <div style={{
+          padding: "10px"
+        }}>
+          <h1>Your deck: {this.state.noOfMyCards} cards</h1>
+
+          {this.state.cards.map(card => {
+            console.log(card);
+
+            return <div style={{
+              display: "inline-block",
+              marginRight: "5px"
+            }}>
+              <img
+                style={{
+                  height: "200px",
+                  width: "100px"
+                }}
+                src={`/figures/${card.dna}.jpg`}
+              />
+              <div>{card.power.toString()}</div>
+            </div>;
+          })}
+        </div>
+      </div>
     );
   }
 }
