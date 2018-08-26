@@ -277,5 +277,73 @@ export default [
 		"payable": false,
 		"stateMutability": "nonpayable",
 		"type": "function"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"name": "_from",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"name": "_gameId",
+				"type": "uint256"
+			},
+			{
+				"components": [
+					{
+						"name": "playerA",
+						"type": "address"
+					},
+					{
+						"name": "playerB",
+						"type": "address"
+					},
+					{
+						"name": "lastPlayer",
+						"type": "address"
+					},
+					{
+						"name": "winner",
+						"type": "address"
+					},
+					{
+						"name": "currentRound",
+						"type": "uint256"
+					},
+					{
+						"name": "round1PlayerAPoints",
+						"type": "uint256"
+					},
+					{
+						"name": "round2PlayerAPoints",
+						"type": "uint256"
+					},
+					{
+						"name": "round3PlayerAPoints",
+						"type": "uint256"
+					},
+					{
+						"name": "round1PlayerBPoints",
+						"type": "uint256"
+					},
+					{
+						"name": "round2PlayerBPoints",
+						"type": "uint256"
+					},
+					{
+						"name": "round3PlayerBPoints",
+						"type": "uint256"
+					}
+				],
+				"indexed": false,
+				"name": "_game",
+				"type": "tuple"
+			}
+		],
+		"name": "GameCreated",
+		"type": "event"
 	}
 ];
