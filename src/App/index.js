@@ -124,7 +124,7 @@ class App extends Component {
                   height: "200px",
                   width: "100px"
                 }}
-                src={`/figures/${card.dna}.jpg`}
+                src={`/figures/${String(card.dna).charAt(0)}.jpg`}
               />
               <div>{card.power.toString()}</div>
             </div>;
