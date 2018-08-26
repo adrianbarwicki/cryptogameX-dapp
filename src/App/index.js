@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import times from 'async/times';
-import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Redirect, withRouter } from 'react-router-dom';
 import GameBoard from '../GameBoard';
 import MyDeck from '../MyDeck';
 
@@ -20,9 +20,10 @@ class App extends Component {
     return (
       <Router>
         <div>
+          
           Web3 Demo
           <Route exact path="/" component={MyDeck}/>
-          <Route path="/game" component={GameBoard}/>
+          <Route exact path="/game" component={GameBoard}/>
         </div>
       </Router>
     );

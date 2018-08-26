@@ -81,7 +81,8 @@ class MyDeck extends Component {
     return (
       <div>
 
-        Web3 Demo
+        <button onClick={() => this.props.history.push('/')}>GO TO DECK</button>
+        <button onClick={() => this.props.history.push('/game')}>GO TO GAME</button>
 
         {this.state.noOfCards}
 
