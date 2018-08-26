@@ -32,11 +32,21 @@ class MyDeck extends Component {
     };
   }
 
+  startGame() {
+    cardbaseInstance
+    .methods
+    .startGame().call()
+    .then((res) => {
+        console.log(res);
+    });
+  }
+
   loadMyCards() {
     let cards = [];
     let noOfMyCards = 0;
 
-    cardbaseInstance.methods.countCards().call()
+    cardbaseInstance
+    .methods.countCards().call()
     .then((res) => {
       const length = Number(res.toString());
       
@@ -75,14 +85,15 @@ class MyDeck extends Component {
   componentDidMount() {
     this.loadMyCards()
   }
-  
-  
+
   render() {
     return (
       <div>
 
         <button onClick={() => this.props.history.push('/')}>GO TO DECK</button>
         <button onClick={() => this.props.history.push('/game')}>GO TO GAME</button>
+
+        <button onClick={() => this.startGame()}>START GAME</button>
 
         {this.state.noOfCards}
 
