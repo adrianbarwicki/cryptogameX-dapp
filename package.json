@@ -1,56 +1,26 @@
 {
   "name": "dapp-boilerplate",
   "version": "1.0.0",
-  "description": "Truffle Box - Boilerplate for Ethereum dApps, built on Truffle 4.",
   "main": "index.js",
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
-  },
-  "author": "O2OProtocol",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/o2oprotocol/dapp-boilerplate/issues"
-  },
-  "homepage": "https://github.com/o2oprotocol/dapp-boilerplate#readme",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/o2oprotocol/dapp-boilerplate.git"
+    "start": "webpack --mode development && live-server ./dist",
+    "build": "webpack --mode production"
   },
   "dependencies": {
-    "alertifyjs": "^1.11.1",
-    "lodash": "^4.17.5",
-    "moment": "^2.22.0",
-    "o2oprotocol": "^0.0.24",
-    "prop-types": "^15.6.1",
-    "query-string": "^6.0.0",
-    "react": "^16.3.1",
-    "react-bootstrap": "^0.32.1",
-    "react-bootstrap-typeahead": "^3.0.3",
-    "react-dom": "^16.3.1",
-    "react-image-lightbox": "^4.6.0",
-    "react-js-pagination": "^3.0.1",
-    "react-jsonschema-form": "^1.0.3",
-    "react-router-dom": "^4.2.2",
-    "react-scripts": "1.1.4",
-    "react-select": "^1.2.1",
+    "async": "^2.6.1",
+    "react": "^16.4.2",
+    "react-dom": "^16.4.2",
     "web3": "^1.0.0-beta.35"
   },
-  "keywords": [
-    "Truffle",
-    "Box",
-    "dApp",
-    "Ethereum",
-    "dApp",
-    "Truffle",
-    "Boilerplate",
-    "React"
-  ],
+  "keywords": [],
   "devDependencies": {
-    "async": "^2.6.1",
-    "enzyme": "^3.3.0",
-    "enzyme-adapter-react-16": "^1.1.1"
+    "babel-core": "^6.26.3",
+    "babel-loader": "^7.1.5",
+    "babel-preset-env": "^1.7.0",
+    "babel-preset-react": "^6.24.1",
+    "css-loader": "^1.0.0",
+    "style-loader": "^0.22.1",
+    "webpack": "^4.17.1",
+    "webpack-cli": "^3.1.0"
   }
 }
