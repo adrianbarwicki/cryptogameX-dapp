@@ -28,109 +28,67 @@ class GameBoard extends Component {
     super(props);
 
     this.state = {
-      noOfCards: 0,
-      cards: []
+        game: {},
+        gameId: props.match.params.gameId,
+        playedCards: []
     };
   }
 
-  loadMyCards() {
-    let cards = [];
-    let noOfMyCards = 0;
-
-    cardbaseInstance.methods.countCards().call()
-    .then((res) => {
-      const length = Number(res.toString());
-      
-      times(length, (index, cb) => {
-        const promise = cardbaseInstance.methods.cardIndexToOwner(index).call();
-
-        promise.then((ethAddress) => {
-            if (defaultAddress !== ethAddress) {
-              return cb();
-            }
-            
-            noOfMyCards++;
-
-            cardbaseInstance
-            .methods
-            .cards(index)
-            .call()
-            .then(cardDetails => {
-              cards.push(cardDetails);
-  
-              cb();
-            });
-        }, err => {
-          console.error(err);
-          return cb(err);
-        })
-      }, () => {
+  loadGame() {
+    cardbaseInstance
+    .methods
+    .games(this.state.gameId)
+    .call()
+    .then((game) => {
         this.setState({
-          cards,
-          noOfMyCards
-        })
-      });
+            game
+        });
     });
   }
 
+  playCard(cardId) {
+    /**
+    cardbaseInstance
+    .methods
+    .useCard(this.state.gameId, cardId)
+    .send()
+    .then((game) => {
+        const playedCards = this.state.playedCards;
+
+        // get all the card details with image
+        playedCards.push(cardId);
+
+        this.setState({
+            playedCards
+        });
+    });
+     */
+  }
+
   componentDidMount() {
-    this.loadMyCards()
+    this.loadGame()
   }
   
   render() {
     return (
       <div>
-
-        Web3 Demo
-
-        {this.state.noOfCards}
-
-        <button onClick={() => {
-          
-        }}>
-          show card index owner
-        </button>
-
-        <button onClick={() => {
-          cardbaseInstance.methods.createNewCard().send({
-            from: defaultAddress
-          }, function (e, res) {
-            console.log(e, res);
-          });
-        }}>Create new button</button>
-
-        <button onClick={() => {
-          cardbaseInstance.methods.countCards().call({
-            from: defaultAddress
-          }).then((res) => {
-            this.setState({
-              noOfCards: Number(res.toString())
-            })
-          });
-        }}>Show card 0</button>
-
         <div style={{
           padding: "10px"
         }}>
-          <h1>Your deck: {this.state.noOfMyCards} cards</h1>
+          <h1>Game:</h1>
+ 
+          {this.state.game.lastPlayer}
+          {this.state.game.playerA}
+          {this.state.game.playerB}
+          {this.state.game.round1PlayerAPoints}
+          {this.state.game.round2PlayerAPoints}
+          {this.state.game.round3PlayerAPoints}
+          {this.state.game.round1PlayerBPoints}
+          {this.state.game.round2PlayerBPoints}
+          {this.state.game.round2PlayerBPoints}
 
-          {this.state.cards.map(card => {
-            console.log(card);
+           <button onClick={() => this.playCard(0)}>Use the first card with index 0</button>
 
-            return <div style={{
-              display: "inline-block",
-              marginRight: "5px"
-            }}>
-              <img
-                style={{
-                  height: "200px",
-                  width: "100px"
-                }}
-                src={`/figures/${String(card.dna).charAt(0)}.jpg`}
-              />
-              <div>{card.power.toString()}</div>
-            </div>;
-          })}
         </div>
       </div>
     );

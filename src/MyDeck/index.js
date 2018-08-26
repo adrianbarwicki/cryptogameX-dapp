@@ -35,9 +35,12 @@ class MyDeck extends Component {
   startGame() {
     cardbaseInstance
     .methods
-    .startGame().call()
+    .startGame().send({
+      from: defaultAddress
+    })
     .then((res) => {
-        console.log(res);
+      debugger;
+      this.props.history.push('/game/1');
     });
   }
 
@@ -90,8 +93,8 @@ class MyDeck extends Component {
     return (
       <div>
 
+        <button onClick={() => this.props.history.push('/game/1')}>GO TO GAME 1</button>
         <button onClick={() => this.props.history.push('/')}>GO TO DECK</button>
-        <button onClick={() => this.props.history.push('/game')}>GO TO GAME</button>
 
         <button onClick={() => this.startGame()}>START GAME</button>
 

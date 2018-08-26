@@ -23,7 +23,7 @@ class App extends Component {
           
           Web3 Demo
           <Route exact path="/" component={MyDeck}/>
-          <Route exact path="/game" component={GameBoard}/>
+          <Route exact path="/game/:gameId" component={GameBoard}/>
         </div>
       </Router>
     );
