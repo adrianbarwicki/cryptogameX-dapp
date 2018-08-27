@@ -4,6 +4,8 @@ import times from 'async/times';
 import Web3 from "web3";
 import abi from "../abi";
 import * as cardbaseInstance from "../cardbaseInstance";
+import * as myDeckService from "./myDeckService";
+import Card from "../Card";
 
 class MyDeck extends Component {
   constructor(props) {
@@ -59,52 +61,10 @@ class MyDeck extends Component {
   }
 
   loadMyCards() {
-    let cards = [];
-    let noOfMyCards = 0;
-
-    this.setupGameCreatedEvent();
-
-    cardbaseInstance.get()
-    .methods.countCards().call({
-      from: cardbaseInstance.getDefaultAddress()
-    })
-    .then((res) => {
-      const length = Number(res.toString());
-      
-      times(length, (index, cb) => {
-        const promise = cardbaseInstance.get()
-        .methods.cardIndexToOwner(index).call({
-          from: cardbaseInstance.getDefaultAddress()
-        });
-
-        promise.then((ethAddress) => {
-            if (cardbaseInstance.getDefaultAddress() !== ethAddress) {
-              return cb();
-            }
-            
-            noOfMyCards++;
-
-            cardbaseInstance.get()
-            .methods
-            .cards(index)
-            .call({
-              from: cardbaseInstance.getDefaultAddress()
-            })
-            .then(cardDetails => {
-              cards.push(cardDetails);
-  
-              cb();
-            });
-        }, err => {
-          console.error(err);
-          return cb(err);
-        })
-      }, () => {
+    myDeckService.loadMyCards().then(cards => {
         this.setState({
-          cards,
-          noOfMyCards
-        })
-      });
+          cards
+        });
     });
   }
 
@@ -137,7 +97,9 @@ class MyDeck extends Component {
             isLoading: true
           });
 
-          cardbaseInstance.get().methods.createNewCard().send(defaultTx)
+          cardbaseInstance.get().methods.createNewCard().send({
+            from: cardbaseInstance.getDefaultAddress()
+          })
           .then(res => {
               console.log(res);
 
@@ -162,24 +124,7 @@ class MyDeck extends Component {
         }}>
           <h1>Your deck: {this.state.noOfMyCards} cards</h1>
 
-          {this.state.cards.map(card => {
-            console.log(card);
-
-            return <div style={{
-              display: "inline-block",
-              marginRight: "5px"
-            }}>
-              <img
-                style={{
-                  height: "200px",
-                  width: "100px"
-                }}
-                src={`/figures/${String(card.dna).charAt(0)}.jpg`}
-              />
-              <div>Level: {card.power.toString()}</div>
-              <div>DNA: {card.dna.toString()}</div>
-            </div>;
-          })}
+          {this.state.cards.map(card => <Card card={card} />)}
         </div>
       </div>
     );
