@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "start": "webpack --mode development && live-server ./dist",
+    "start": "webpack --mode development && live-server ./dist --entry-file=./index.html",
     "build": "webpack --mode production"
   },
   "dependencies": {

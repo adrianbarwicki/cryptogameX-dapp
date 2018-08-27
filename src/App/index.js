@@ -3,7 +3,7 @@ import times from 'async/times';
 import { BrowserRouter as Router, Route, Redirect, withRouter } from 'react-router-dom';
 import GameBoard from '../GameBoard';
 import MyDeck from '../MyDeck';
-
+import Homepage from '../Homepage';
 class App extends Component {
   constructor(props) {
     super(props);
@@ -24,6 +24,7 @@ class App extends Component {
           Web3 Demo
           <Route exact path="/" component={MyDeck}/>
           <Route exact path="/game/:gameId" component={GameBoard}/>
+          <Route exact path="/homepage" component={Homepage}/>
         </div>
       </Router>
     );
