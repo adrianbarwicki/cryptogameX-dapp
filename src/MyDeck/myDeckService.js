@@ -38,6 +38,8 @@ export const loadMyCards = () => new Promise((resolve, reject) => {
                     from: cardbaseInstance.getDefaultAddress()
                 })
                 .then(cardDetails => {
+                    cardDetails.cardId = index;
+                    
                     cards.push(cardDetails);
         
                     cb();

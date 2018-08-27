@@ -58,6 +58,24 @@ class GameBoard extends Component {
   }
   
   render() {
+    const GameStats = <div style={{
+        padding: "10px"
+        }}>
+        <h1>Game:</h1>
+
+        <p>PlayerA: {this.state.game.playerA}</p>
+        <p>PlayerB: {this.state.game.playerB}</p>
+        <p>Last player: {this.state.game.lastPlayer}</p>
+        <p>round 1 player A points: {this.state.game.round1PlayerAPoints}</p>
+        <p>round 2 player A points:  {this.state.game.round2PlayerAPoints}</p>
+        <p>round 3 player A points:  {this.state.game.round3PlayerAPoints}</p>
+        <p>round 1 player B points: {this.state.game.round1PlayerBPoints}</p>
+        <p>round 2 player B points: {this.state.game.round2PlayerBPoints}</p>
+        <p>round 3 player B points: {this.state.game.round2PlayerBPoints}</p>
+
+        <button onClick={() => this.playCard(0)}>Use the first card with index 0</button>
+    </div>;
+
     return (
       <div style={{
             position: "absolute",
@@ -69,23 +87,7 @@ class GameBoard extends Component {
             display: "inline-block",
             width: "20%"
         }}>
-            <div style={{
-                padding: "10px"
-                }}>
-                <h1>Game:</h1>
-        
-                <p>PlayerA: {this.state.game.playerA}</p>
-                <p>PlayerB: {this.state.game.playerB}</p>
-                <p>Last player: {this.state.game.lastPlayer}</p>
-                <p>round 1 player A points: {this.state.game.round1PlayerAPoints}</p>
-                <p>round 2 player A points:  {this.state.game.round2PlayerAPoints}</p>
-                <p>round 3 player A points:  {this.state.game.round3PlayerAPoints}</p>
-                <p>round 1 player B points: {this.state.game.round1PlayerBPoints}</p>
-                <p>round 2 player B points: {this.state.game.round2PlayerBPoints}</p>
-                <p>round 3 player B points: {this.state.game.round2PlayerBPoints}</p>
-
-                <button onClick={() => this.playCard(0)}>Use the first card with index 0</button>
-            </div>
+            <GameStats />
         </div>
         <div style={{
             display: "inline-block",
