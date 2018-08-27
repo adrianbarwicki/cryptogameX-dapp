@@ -40,9 +40,9 @@ class GameBoard extends Component {
     })
     .then((game) => {
         const playedCards = this.state.playedCards;
-
+        const card = this.state.myCards.find(_ => _.cardId === cardId);
         // get all the card details with image
-        playedCards.push(cardId);
+        playedCards.push(card);
 
         this.setState({
             playedCards
@@ -93,7 +93,31 @@ class GameBoard extends Component {
             display: "inline-block",
             width: "80%"
         }}>
-            {this.state.myCards.map(card => <Card onClick={() => this.playCard(card)} card={card} />)}
+            <div style={{ height: "50%" }}>
+                <h2>Opponent cards</h2>
+            </div>
+            <div style={{ height: "50%" }}>
+                <h2>
+                    Played cards:
+                </h2>
+                {this.state.myCards.map(card =>
+                    <div style={{
+                        display: "inline-block"
+                    }} onClick={() => this.playCard(card.cardId)}>
+                        <Card card={card} />
+                    </div>
+                )}
+                <h2>
+                    All cards:
+                </h2>
+                {this.state.myCards.map(card =>
+                    <div style={{
+                        display: "inline-block"
+                    }} onClick={() => this.playCard(card.cardId)}>
+                        <Card card={card} />
+                    </div>
+                )}
+            </div>
         </div>
       </div>
     );
