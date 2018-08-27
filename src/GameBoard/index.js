@@ -87,13 +87,13 @@ class GameBoard extends Component {
             display: "inline-block",
             width: "20%"
         }}>
-            <GameStats />
+            {GameStats}
         </div>
         <div style={{
             display: "inline-block",
             width: "80%"
         }}>
-            {this.state.myCards.map(card => <Card card={card} />)}
+            {this.state.myCards.map(card => <Card onClick={() => this.playCard(card)} card={card} />)}
         </div>
       </div>
     );
