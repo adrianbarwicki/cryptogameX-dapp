@@ -2,13 +2,13 @@ import times from 'async/times';
 import * as cardbaseInstance from "../cardbaseInstance";
 
 export const loadMyGames = () => new Promise((resolve, reject) => {
-    let cards = [];
+    let games = [];
     let noOfMyCards = 0;
 
     cardbaseInstance
     .get()
     .methods
-    .countCards()
+    .countGames()
     .call({
       from: cardbaseInstance.getDefaultAddress()
     })
@@ -19,37 +19,26 @@ export const loadMyGames = () => new Promise((resolve, reject) => {
         const promise = cardbaseInstance
             .get()
             .methods
-            .cardIndexToOwner(index)
+            .games(index)
             .call({
                 from: cardbaseInstance.getDefaultAddress()
             });
 
-            promise.then((ethAddress) => {
-                if (cardbaseInstance.getDefaultAddress() !== ethAddress) {
+            promise
+            .then(gameDetails => {
+                if (
+                    cardbaseInstance.getDefaultAddress() !== gameDetails.playerA &&
+                    cardbaseInstance.getDefaultAddress() !== gameDetails.playerB) {
                     return cb();
                 }
-                
-                noOfMyCards++;
-
-                cardbaseInstance.get()
-                .methods
-                .cards(index)
-                .call({
-                    from: cardbaseInstance.getDefaultAddress()
-                })
-                .then(cardDetails => {
-                    cardDetails.cardId = index;
+                    gameDetails.gameId = index;
                     
-                    cards.push(cardDetails);
+                    games.push(gameDetails);
         
                     cb();
                 });
             }, err => {
-            console.error(err);
-            return cb(err);
+                return resolve(games);
             });
-      }, () => {
-        return resolve(cards);
       });
     });
-});

@@ -6,6 +6,8 @@ import abi from "../abi";
 import * as cardbaseInstance from "../cardbaseInstance";
 import * as myDeckService from "./myDeckService";
 import Card from "../Card";
+import * as gameService from "../GameBoard/gameService";
+import GameStats from "../GameStats";
 
 class MyDeck extends Component {
   constructor(props) {
@@ -13,7 +15,8 @@ class MyDeck extends Component {
 
     this.state = {
       noOfCards: 0,
-      cards: []
+      cards: [],
+      games: []
     };
   }
 
@@ -58,6 +61,9 @@ class MyDeck extends Component {
           noOfCards: Number(res.toString())
         })
       });
+
+
+
   }
 
   loadMyCards() {
@@ -68,8 +74,18 @@ class MyDeck extends Component {
     });
   }
 
+  loadMyGames() {
+    gameService.loadMyGames().then(games => {
+      debugger;
+        this.setState({
+          games
+        });
+    });
+  }
+
   componentDidMount() {
     this.loadMyCards()
+    this.loadMyGames();
   }
 
   render() {
@@ -122,9 +138,17 @@ class MyDeck extends Component {
         <div style={{
           padding: "10px"
         }}>
-          <h1>Your deck: {this.state.noOfMyCards} cards</h1>
+          <h1>Your deck: {this.state.cards.length} cards</h1>
 
           {this.state.cards.map(card => <Card card={card} />)}
+        </div>
+
+        <div style={{
+          padding: "10px"
+        }}>
+          <h1>Your games: {this.state.games.length} games</h1>
+
+          {this.state.games.map(game => GameStats(game))}
         </div>
       </div>
     );

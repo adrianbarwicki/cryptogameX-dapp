@@ -1,3 +1,4 @@
-// ropsten: 0xf2CEC9A7ce1bB82cCFFc4eA3e4056cc8119226ef
-
-export default "0x4845a85df358b3d5c519f00202e6d141493e0731";
+/**
+ * This is the smart contract address
+ */
+export default "0xdb5249b5d1168dd7867e95e20604e6e8dfd7cd8e";
